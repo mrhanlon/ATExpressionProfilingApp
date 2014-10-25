@@ -1,7 +1,4 @@
 <!-- AT Expression Profiling Science App -->
-<!--<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>-->
-<script type="text/javascript" src="bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
-
 <script type="text/javascript" src="//cdn.datatables.net/plug-ins/380cb78f450/integration/bootstrap/3/dataTables.bootstrap.js"></script>
 
 <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/plug-ins/380cb78f450/integration/bootstrap/3/dataTables.bootstrap.css">
@@ -10,48 +7,48 @@
 <div class="science-app" data-app-name="atexpressionprofilingapphelp"></div>
 
 <div class="science-app" data-app-name="atexpressionprofilingapp">
-	<div id="expression_viewer">
-		<h3>Enter an Arabidopsis gene identifier AND/OR choose a tissue to view the expression report</h3>
-		<form name="expression_gene_form" role="form">
-			<div class="form-group col-xs-4">
-				<label for="expression_gene" class="control-label">Gene (AGI ID, e.g. AT1G33930.1, AT1G01460.1)</label>
-				<input type="text" name="expression_gene" id="expression_gene" value="AT1G33930.1" class="form-control" placeholder="Gene (AGI ID)"/>
-			</div>
-			<div class="form-group col-xs-4">
-				<label for="expression_tissue" class="control-label">Tissue or Treatment Type</label>
-					<select name="expression_tissue" id="expression_tissue" class="form-control">
-						<option value="none">None</option>
-						<option value="flower">Flower Buds</option>
-						<option value="iaa">IAA</option>
-						<option value="leaf">Leaf</option>
-						<option value="root">Root</option>
-						<option value="salicylic">Salicylic Acid</option>
-						<option value="nacl">NaCl</option>
-						<option value="young">Young Siliques</option>
-						<option value="t87">T87 Cell Culture</option>
-					</select>
-			</div>
-			<br>
-	
-			<div class="form-group">
-				<button type="submit" class="btn btn-success">Submit</button>
-				<button type="button" class="btn btn-danger" id="expression_gene_form_reset">Clear</button>
-			</div>
-		</form>
-	
-		<div id="expression_itable" class="hidden"></div>
-	
-		<div class="result"></div>
-	
-		<div class="row">
-			<div class="col-sm-12">
-				<p>
-					Data &amp; web services provided by
-					<a href="http://www.jcvi.org" target="_blank">JCVI</a>.
-				</p>
-			</div>
-		</div>
-	</div>
+    <div id="expression_viewer">
+        <h3>Enter an Arabidopsis gene identifier AND/OR choose a tissue to view the expression report</h3>
+        <form name="expression_gene_form" role="form">
+            <div class="form-group col-xs-4">
+                <label for="expression_gene" class="control-label">Gene (AGI ID, e.g. AT1G33930.1, AT1G01460.1)</label>
+                <input type="text" name="expression_gene" id="expression_gene" value="AT1G33930.1" class="form-control" placeholder="Gene (AGI ID)"/>
+            </div>
+            <div class="form-group col-xs-4">
+                <label for="expression_tissue" class="control-label">Tissue or Treatment Type</label>
+                    <select name="expression_tissue" id="expression_tissue" class="form-control">
+                        <option value="none">None</option>
+                        <option value="flower">Flower Buds</option>
+                        <option value="iaa">IAA</option>
+                        <option value="leaf">Leaf</option>
+                        <option value="root">Root</option>
+                        <option value="salicylic">Salicylic Acid</option>
+                        <option value="nacl">NaCl</option>
+                        <option value="young">Young Siliques</option>
+                        <option value="t87">T87 Cell Culture</option>
+                    </select>
+            </div>
+            <br>
+    
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">Submit</button>
+                <button type="button" class="btn btn-danger" id="expression_gene_form_reset">Clear</button>
+            </div>
+        </form>
+    
+        <div id="expression_itable" class="hidden"></div>
+    
+        <div class="result"></div>
+    
+        <div class="row">
+            <div class="col-sm-12">
+                <p>
+                    Data &amp; web services provided by
+                    <a href="http://www.jcvi.org" target="_blank">JCVI</a>.
+                </p>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript" src="app/scripts/app.js?__inline=true"></script>
