@@ -1,0 +1,7 @@
+{
+  "name": "atexpressionprofilingapp",
+  "private": true,
+  "dependencies": {
+    "datatables": "~1.10.3"
+  }
+}
