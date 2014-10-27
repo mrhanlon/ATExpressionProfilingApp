@@ -91,6 +91,7 @@
         $('#expression_itable').html('<table cellspacing="0" class="table table-striped table-bordered" id="etable"></table>');
         $('#etable').prepend('<caption>Results from the Arabidopsis 2010 Expression Database</caption>');
         $('#etable').dataTable( {
+            "lengthMenu": [ 5, 10, 25, 50, 100 ],
             "processing": true,
             "ajax": {
                   "url": myUrl,
@@ -104,13 +105,13 @@
             },
             "columns": [
                 { "data": "transcript", "title": "Gene" },
-                { "data": "expression_record.0.material_text_description", "title": "Material" },
-                { "data": "expression_record.0.cycle_time", "title": "Cycle Time" },
-                { "data": "expression_record.0.cycle_time_stdev", "title": "Std dev (+)" },
-                { "data": "expression_record.0.ratio_to_invariants", "title": "Ratio To Invariants" },
-                { "data": "expression_record.0.ratio_to_invariants_stdev", "title": "Std dev (+)" },
-                { "data": "expression_record.0.absolute_concentration", "title": "Absolute Concentration" },
-                { "data": "expression_record.0.absolute_concentration_stdev", "title": "Std dev (+)" },
+                { "data": "expression_record.material_text_description", "title": "Material" },
+                { "data": "expression_record.cycle_time", "title": "Cycle Time" },
+                { "data": "expression_record.cycle_time_stdev", "title": "Std dev (+)" },
+                { "data": "expression_record.ratio_to_invariants", "title": "Ratio To Invariants" },
+                { "data": "expression_record.ratio_to_invariants_stdev", "title": "Std dev (+)" },
+                { "data": "expression_record.absolute_concentration", "title": "Absolute Concentration" },
+                { "data": "expression_record.absolute_concentration_stdev", "title": "Std dev (+)" },
             ]
         } );
 
@@ -135,7 +136,7 @@
         $( 'form[name=expression_gene_form]' ).on( 'submit', function( e ) {
           e.preventDefault();
 
-          var url = 'https://api.araport.org/community/v0.3/erik-dev/expression_per_gene_tissue_02_v0.2/search';
+          var url = 'https://api.araport.org/community/v0.3/vivek-dev/expression_per_gene_tissue_02_v0.2/search';
 
           $('.result').empty();
           var gene = $('#expression_gene').val();
