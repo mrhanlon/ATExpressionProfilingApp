@@ -2,7 +2,6 @@
   'use strict';
 
   console.log('Hello, ATExpressionProfilingApp!');
-  var appContext = $('[data-app-name="atexpressionprofilingapp"]');
 
   window.addEventListener('Agave::ready', function() {
     var Agave = window.Agave;
