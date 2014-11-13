@@ -141,11 +141,15 @@ module.exports = function(grunt) {
     },
 
     // Automatically inject Bower components into the HTML file
+    // don't include any transient jQuery dependencies
     wiredep: {
       target: {
         src: [
           'index.html'
-        ]
+        ],
+        options: {
+          exclude: [ /jquery\.js$/, /jquery\.min\.js$/ ]
+        }
       }
     },
 
@@ -171,11 +175,24 @@ module.exports = function(grunt) {
     }
   });
 
+  /*
+   * Make sure that the bower_components dependency path exists
+   * even if we have no external dependencies, otherwise
+   * wiredep gets mad
+   */
+  grunt.registerTask('checkdeps', function() {
+    var fs = require('fs');
+    if (! fs.existsSync('bower_components')) {
+      fs.mkdirSync('bower_components');
+    }
+  });
+
   grunt.registerTask('serve', function (target) {
     if (target === 'dist') {
       return grunt.task.run([
         'clean:server',
         'jshint',
+        'checkdeps',
         'wiredep',
         'includes',
         'copy',
@@ -186,6 +203,7 @@ module.exports = function(grunt) {
     grunt.task.run([
       'clean:server',
       'jshint',
+      'checkdeps',
       'wiredep',
       'includes',
       'copy',
@@ -208,6 +226,7 @@ module.exports = function(grunt) {
   grunt.registerTask('dist', [
     'clean:dist',
     'jshint',
+    'checkdeps',
     'wiredep',
     'inline'
   ]);

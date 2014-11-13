@@ -1,102 +1,88 @@
-(function(window, $, undefined) {
+/* global _ */
+/* jshint camelcase: false */
+(function(window, $, _, undefined) {
   'use strict';
 
   console.log('Hello, ATExpressionProfilingApp!');
 
+  var appContext = $('[data-app-name="atexpressionprofilingapp"]');
+
   window.addEventListener('Agave::ready', function() {
     var Agave = window.Agave;
 
-    var DEBUG, log, init, renderExpressionTable;
-
-    DEBUG = true;
-    log = function log( message ) {
+    var DEBUG = true;
+    var log = function log( message ) {
         if ( DEBUG ) {
           console.log( message );
         }
       };
 
-    init = function init() {
+    var init = function init() {
         log( 'Initializing app...' );
       };
 
+    var templates = {
+        resultTable: _.template('<table class="table table-striped table-bordered"><caption>Results from the Arabidopsis 2010 Expression Database</caption><thead><tr><th>Gene</th><th>Material</th><th>Cycle Time</th><th>Std dev (+)</th><th>Ratio to Invariants</th><th>Std dev (+)</th><th>Absolute Concentration</th><th>Std dev (+)</th></tr></thead><tbody><% _.each(result, function(r) { %><tr><td><%= r.transcript %> <button name="gene-report" data-locus="<%= r.transcript %>" class="btn btn-link btn-sm"><i class="fa fa-ellipsis-h"></i><span class="sr-only">Get Gene Report</span></button></td><td><%= r.expression_record.material_text_description %></td><td><%= r.expression_record.cycle_time %></td><td><%= r.expression_record.cycle_time_stdev %></td><td><%= r.expression_record.ratio_to_invariants %></td><td><%= r.expression_record.ratio_to_invariants_stdev %></td><td><%= r.expression_record.absolute_concentration %></td><td><%= r.expression_record.absolute_concentration_stdev %></td></tr><% }) %></tbody></table>'),
+        geneReport: _.template('<div class="modal fade"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button><h4>Gene Report: <%= locus %></h4></div><div class="modal-body"><% _.each(properties, function(prop) { %><h3><%= prop.type.replace("_"," ") %></h3><p><%= prop.value %></p><% }) %></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div></div></div>')
+    };
+
     //draw interactions table
-    renderExpressionTable = function renderExpressionTable(url, gene, tissue) {
-        $('#expression_itable').empty();
+    var showResults = function showResults(json) {
 
-        var myUrl = url;
-        if (url.substr(-1) === '/') {
-          myUrl = url.replace(/\/$/, '');
+        if ( ! (json && json.obj) ) {
+            $('.results', appContext).html('<div class="alert alert-danger">Invalid response!</div>');
+            return;
         }
 
-        if (tissue !== 'none') {
-          myUrl += '?transcript=' + gene + '&material=' + tissue;
-        } else {
-          myUrl += '?transcript=' + gene;
-        }
-        log('Grabbing data from ' + myUrl);
-        log('Using authorization header: "Authorization: Bearer ' + Agave.token.accessToken + '"');
+        $('.results', appContext).html(templates.resultTable(json.obj));
 
-        $('#expression_itable').html('<table cellspacing="0" class="table table-striped table-bordered" id="etable"></table>');
-        $('#etable').prepend('<caption>Results from the Arabidopsis 2010 Expression Database</caption>');
-        $('#etable').dataTable( {
-            'lengthMenu': [ 5, 10, 25, 50, 100 ],
-            'processing': true,
-            'ajax': {
-                'url': myUrl,
-                'dataSrc': 'result',
-                'headers': {
-                    'Authorization': 'Bearer ' + Agave.token.accessToken
-                  },
-                  'error': function(jqXHR, textStatus, errorThrown){
-                    console.error('Error: ' + textStatus, errorThrown);
-                  }
-                },
-                'columns': [
-                  { 'data': 'transcript', 'title': 'Gene' },
-                  { 'data': 'expression_record.material_text_description', 'title': 'Material' },
-                  { 'data': 'expression_record.cycle_time', 'title': 'Cycle Time' },
-                  { 'data': 'expression_record.cycle_time_stdev', 'title': 'Std dev (+)' },
-                  { 'data': 'expression_record.ratio_to_invariants', 'title': 'Ratio To Invariants' },
-                  { 'data': 'expression_record.ratio_to_invariants_stdev', 'title': 'Std dev (+)' },
-                  { 'data': 'expression_record.absolute_concentration', 'title': 'Absolute Concentration' },
-                  { 'data': 'expression_record.absolute_concentration_stdev', 'title': 'Std dev (+)' },
-                ]
-              } );
+        $('button[name=gene-report]', appContext).on('click', function(e) {
+            e.preventDefault();
 
-        $('#expression_itable').removeClass('hidden');
-      };
+            var locus = $(this).attr('data-locus');
+
+            var query = {
+                locus: locus.slice(0, locus.indexOf('.'))
+            };
+
+            Agave.api.adama.search(
+                {'namespace': 'aip', 'service': 'locus_gene_report_v0.1', 'queryParams': query},
+                function(search) {
+                    var html = templates.geneReport(search.obj.result[0]);
+                    $(html).appendTo('body').modal();
+                }
+            );
+        });
+
+        $('.results table', appContext).dataTable( {'lengthMenu': [5, 10, 25, 50, 100]} );
+    };
 
     /* go! */
-    if (! $('#expression_viewer').hasClass('expression-viewer-processed') ) {
-      // prevent duplicate initialization
-      $('#expression_viewer').addClass('expression-viewer-processed');
+    init();
 
-      init();
-
-      $('#expression_gene_form_reset').on('click', function() {
-        $('#expression_itable').empty();
-        $('#expression_itable').addClass('hidden');
+    $('#expression_gene_form_reset').on('click', function() {
+        $('.results').empty();
         $('#expression_gene').val('');
         $('#expression_tissue').val('none');
-        $('.result').empty();
-      });
+    });
 
-      $( 'form[name=expression_gene_form]' ).on( 'submit', function( e ) {
-          e.preventDefault();
+    $('form[name=expression_gene_form]').on('submit', function(e) {
+        e.preventDefault();
 
-          var url = 'https://api.araport.org/community/v0.3/vivek-dev/expression_per_gene_tissue_02_v0.2/search';
+        var query = {
+            transcript: this.expression_gene.value,
+        };
+        if (this.expression_tissue.value !== 'none') {
+            query.material = this.expression_tissue.value;
+        }
 
-          $('.result').empty();
-          var gene = $('#expression_gene').val();
-          var tissue = $('#expression_tissue').val();
-          //did the user enter the name of a gene?
-          if (gene.length > 0) {
-            renderExpressionTable(url, gene, tissue);
-          } else {
-            window.alert('You must enter a gene first!');
-          }
-        }); /// end gene submit function
-    }
+        $('.results').empty();
+        Agave.api.adama.search({
+            'namespace': 'vivek-dev',
+            'service': 'expression_per_gene_tissue_02_v0.2',
+            'queryParams': query
+        }, showResults);
+    }); /// end gene submit function
   });
 
-})(window, jQuery);
+})(window, jQuery, _);
