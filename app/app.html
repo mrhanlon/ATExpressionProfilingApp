@@ -1,35 +1,93 @@
 <!-- AT Expression Profiling Science App -->
 <div class="science-app" data-app-name="atexpressionprofilingapp">
     <div id="expression_viewer">
-        <h3>Enter an Arabidopsis gene identifier AND/OR choose a tissue to view the expression report</h3>
-        <form name="expression_gene_form" role="form">
-            <div class="form-group col-xs-4">
-                <label for="expression_gene" class="control-label">Gene (AGI ID, e.g. AT1G33930.1, AT1G01460.1)</label>
-                <input type="text" name="expression_gene" id="expression_gene" value="AT1G33930.1" class="form-control" placeholder="Gene (AGI ID)"/>
-            </div>
-            <div class="form-group col-xs-4">
-                <label for="expression_tissue" class="control-label">Tissue or Treatment Type</label>
-                    <select name="expression_tissue" id="expression_tissue" class="form-control">
-                        <option value="none">None</option>
-                        <option value="flower">Flower Buds</option>
-                        <option value="iaa">IAA</option>
-                        <option value="leaf">Leaf</option>
-                        <option value="root">Root</option>
-                        <option value="salicylic">Salicylic Acid</option>
-                        <option value="nacl">NaCl</option>
-                        <option value="young">Young Siliques</option>
-                        <option value="t87">T87 Cell Culture</option>
-                    </select>
-            </div>
-            <br>
 
-            <div class="form-group">
-                <button type="submit" class="btn btn-success">Submit</button>
-                <button type="button" class="btn btn-danger" id="expression_gene_form_reset">Clear</button>
-            </div>
-        </form>
+        <ul id="ev_tabs" class="nav nav-tabs" role="tablist">
+            <li id="t_expression_gene" class="active"><a href="#d_expression_gene" role="tab" data-toggle="tab">Gene Expression</a></li>
+            <li id="t_expression_comp"><a href="#d_expression_comp" role="tab" data-toggle="tab">Expression Comparison</a></li>
+        </ul>
 
-        <div class="results"></div>
+        <div id="ev_tab_content" class="tab-content">
+            <div class="tab-pane active" id="d_expression_gene">
+
+                <h3>Enter an Arabidopsis gene identifier AND/OR choose a tissue to view the expression report</h3>
+                <form name="expression_gene_form" role="form">
+                    <div class="form-group col-xs-4">
+                        <label for="expression_gene" class="control-label">Gene (AGI ID, e.g. AT1G33930.1, AT1G01460.1)</label>
+                        <input type="text" name="expression_gene" id="expression_gene" value="AT1G33930.1" class="form-control" placeholder="Gene (AGI ID)"/>
+                    </div>
+                    <div class="form-group col-xs-4">
+                        <label for="expression_tissue" class="control-label">Tissue or Treatment Type</label>
+                        <select name="expression_tissue" id="expression_tissue" class="form-control">
+                            <option value="none">None</option>
+                            <option value="flower">Flower Buds</option>
+                            <option value="iaa">IAA</option>
+                            <option value="leaf">Leaf</option>
+                            <option value="root">Root</option>
+                            <option value="salicylic">Salicylic Acid</option>
+                            <option value="nacl">NaCl</option>
+                            <option value="young">Young Siliques</option>
+                            <option value="t87">T87 Cell Culture</option>
+                        </select>
+                    </div>
+                    <br>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                        <button type="button" class="btn btn-danger" id="expression_gene_form_reset">Clear</button>
+                    </div>
+                </form>
+
+                <div class="gene_results"></div>
+            </div>
+
+            <div class="tab-pane" id="d_expression_comp">
+                <h3>Select two tissue/treatment types and a fold change to view the expression report</h3>
+                <h5><em>For example, if you want to examine genes that show 5-fold expression in ROOT compared to LEAF.</em></h5>
+                <form name="expression_comp_form" role="form">
+                    <div class="form-group col-xs-4">
+                        <label for="expression_tissue1" class="control-label">Tissue or Treatment Type</label>
+                        <select name="expression_tissue1" id="expression_tissue1" class="form-control">
+                            <option value="flower">Flower Buds</option>
+                            <option value="iaa">IAA</option>
+                            <option value="leaf">Leaf</option>
+                            <option value="root">Root</option>
+                            <option value="salicylic">Salicylic Acid</option>
+                            <option value="nacl">NaCl</option>
+                            <option value="young">Young Siliques</option>
+                            <option value="t87">T87 Cell Culture</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-xs-4">
+                        <label for="fold_change" class="control-label">> Fold Change</label>
+                        <input type="number" name="fold_change" id="fold_change" size="5" class="form-control" required/>
+                    </div>
+                    <div class="form-group col-xs-4">
+                        <label for="expression_tissue2" class="control-label">Tissue or Treatment Type</label>
+                        <select name="expression_tissue2" id="expression_tissue2" class="form-control">
+                            <option value="flower">Flower Buds</option>
+                            <option value="iaa">IAA</option>
+                            <option value="leaf">Leaf</option>
+                            <option value="root">Root</option>
+                            <option value="salicylic">Salicylic Acid</option>
+                            <option value="nacl">NaCl</option>
+                            <option value="young">Young Siliques</option>
+                            <option value="t87">T87 Cell Culture</option>
+                        </select>
+                    </div>
+                    <br>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                        <button type="button" class="btn btn-danger" id="expression_comp_form_reset">Clear</button>
+                    </div>
+                </form>
+
+                <div class="comp_results"></div>
+            </div>
+        </div>
+
+        <div class="error"></div>
 
         <div class="row">
             <div class="col-sm-12">
