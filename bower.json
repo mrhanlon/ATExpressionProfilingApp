@@ -3,7 +3,7 @@
   "private": true,
   "dependencies": {
     "datatables": "~1.10.3",
-    "bootstrap3-datatables": "~1.0.1",
-    "underscore": "~1.7.0"
+    "underscore": "~1.7.0",
+    "datatables-bootstrap3": "*"
   }
 }
