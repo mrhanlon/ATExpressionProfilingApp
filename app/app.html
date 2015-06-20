@@ -5,6 +5,7 @@
         <ul id="ev_tabs" class="nav nav-tabs" role="tablist">
             <li id="t_expression_gene" class="active"><a href="#d_expression_gene" role="tab" data-toggle="tab">Gene Expression</a></li>
             <li id="t_expression_comp"><a href="#d_expression_comp" role="tab" data-toggle="tab">Expression Comparison</a></li>
+            <li id="t_reporter_images"><a href="#d_reporter_images" role="tab" data-toggle="tab">Reporter Images</a></li>
         </ul>
 
         <div id="ev_tab_content" class="tab-content">
@@ -84,6 +85,24 @@
                 </form>
 
                 <div class="comp_results"></div>
+            </div>
+
+            <div class="tab-pane" id="d_reporter_images">
+
+                <h3>Enter an Arabidopsis Gene to view available reporter images</h3>
+                <form name="reporter_image_form" role="form">
+                    <div class="form-group col-xs-4">
+                        <label for="ri_gene" class="control-label">Locus (AGI ID, e.g. AT1G51960)</label>
+                        <input type="text" name="ri_gene" id="ri_gene" value="AT1G51960" class="form-control" placeholder="Gene (AGI ID)"/>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                        <button type="button" class="btn btn-danger" id="reporter_image_form_reset">Clear</button>
+                    </div>
+                </form>
+
+                <div class="reporter_image_results"></div>
             </div>
         </div>
 
