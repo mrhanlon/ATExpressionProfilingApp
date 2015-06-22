@@ -21,25 +21,38 @@
         log( 'Initializing app...' );
       };
 
+    //var imageSrc = 'https://api.araport.org/community/v0.3/eriksf-dev/image_by_id_v0.1/search';
+    var imageSrc = 'http://www.jcvi.org/arabidopsis/qpcr/get_image.php';
+
     var templates = {
-        resultTable: _.template('<table class="table table-striped table-bordered"><caption>Results from the Arabidopsis 2010 Expression Database</caption><thead><tr><th>Gene</th><th>Material</th><th>Cycle Time</th><th>Std dev (+)</th><th>Ratio to Invariants</th><th>Std dev (+)</th><th>Absolute Concentration</th><th>Std dev (+)</th></tr></thead><tbody><% _.each(result, function(r) { %><tr><td><%= r.transcript %> <button name="gene-report" data-locus="<%= r.transcript %>" class="btn btn-link btn-sm"><i class="fa fa-ellipsis-h"></i><span class="sr-only">Get Gene Report</span></button></td><td><%= r.expression_record.material_text_description %></td><td><%= r.expression_record.cycle_time %></td><td><%= r.expression_record.cycle_time_stdev %></td><td><%= r.expression_record.ratio_to_invariants %></td><td><%= r.expression_record.ratio_to_invariants_stdev %></td><td><%= r.expression_record.absolute_concentration %></td><td><%= r.expression_record.absolute_concentration_stdev %></td></tr><% }) %></tbody></table>'),
-        comparisonTable: _.template('<table class="table table-striped table-bordered"><caption>Results from the Arabidopsis 2010 Expression Database</caption><thead><tr><th>Gene</th><th>Material 1</th><th>Expression Value (fmol/mg)</th><th>Std dev (+)</th><th>Material 2</th><th>Expression Value (fmol/mg)</th><th>Std dev (+)</th></tr></thead><tbody><% _.each(result, function(r) { %><tr><td><%= r.transcript %> <button name="gene-report" data-locus="<%= r.transcript %>" class="btn btn-link btn-sm"><i class="fa fa-ellipsis-h"></i><span class="sr-only">Get Gene Report</span></button></td><td><%= r.expression_comparison_record.material1_text_description %></td><td><%= r.expression_comparison_record.expression_value_material1 %></td><td><%= r.expression_comparison_record.expression_value_material1_stdev %></td><td><%= r.expression_comparison_record.material2_text_description %></td><td><%= r.expression_comparison_record.expression_value_material2 %></td><td><%= r.expression_comparison_record.expression_value_material2_stdev %></td></tr><% }) %></tbody></table>'),
+        resultTable: _.template('<table class="table table-striped table-bordered"><caption>Results from the Arabidopsis 2010 Expression Database</caption><thead><tr><th>Gene</th><th>Material</th><th>Cycle Time</th><th>Std dev (+)</th><th>Ratio to Invariants</th><th>Std dev (+)</th><th>Absolute Concentration</th><th>Std dev (+)</th></tr></thead><tbody><% _.each(result, function(r) { %><tr><td><%= r.transcript %> <button name="gene-report" data-locus="<%= r.transcript %>" class="btn btn-link btn-sm"><i class="fa fa-info-circle"></i><span class="sr-only">Get Gene Report</span></button></td><td><%= r.expression_record.material_text_description %></td><td><%= r.expression_record.cycle_time %></td><td><%= r.expression_record.cycle_time_stdev %></td><td><%= r.expression_record.ratio_to_invariants %></td><td><%= r.expression_record.ratio_to_invariants_stdev %></td><td><%= r.expression_record.absolute_concentration %></td><td><%= r.expression_record.absolute_concentration_stdev %></td></tr><% }) %></tbody></table>'),
+        comparisonTable: _.template('<table class="table table-striped table-bordered"><caption>Results from the Arabidopsis 2010 Expression Database</caption><thead><tr><th>Gene</th><th>Material 1</th><th>Expression Value (fmol/mg)</th><th>Std dev (+)</th><th>Material 2</th><th>Expression Value (fmol/mg)</th><th>Std dev (+)</th></tr></thead><tbody><% _.each(result, function(r) { %><tr><td><%= r.transcript %> <button name="gene-report" data-locus="<%= r.transcript %>" class="btn btn-link btn-sm"><i class="fa fa-info-circle"></i><span class="sr-only">Get Gene Report</span></button></td><td><%= r.expression_comparison_record.material1_text_description %></td><td><%= r.expression_comparison_record.expression_value_material1 %></td><td><%= r.expression_comparison_record.expression_value_material1_stdev %></td><td><%= r.expression_comparison_record.material2_text_description %></td><td><%= r.expression_comparison_record.expression_value_material2 %></td><td><%= r.expression_comparison_record.expression_value_material2_stdev %></td></tr><% }) %></tbody></table>'),
         geneReport: _.template('<div class="modal fade"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button><h4>Gene Report: <%= locus %></h4></div><div class="modal-body"><% _.each(properties, function(prop) { %><h3><%= prop.type.replace("_"," ") %></h3><p><%= prop.value %></p><% }) %></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div></div></div>'),
-        imageTable: _.template('<table class="table table-striped table-bordered">' +
+        imageTable: _.template('<table id="iTable" class="table table-striped table-bordered">' +
                                   '<thead><tr>' +
                                   '<th></th>' +
-                                  '<th>Locus</th>' +
+                                  '<th>Gene</th>' +
                                   '<th>Line</th>' +
                                   '</tr></thead><tbody>' +
                                   '<% _.each(result, function(r) { %>' +
                                   '<tr>' +
-                                  '<td>+</td>' +
-                                  '<td><%= r.locus %></td>' +
+                                  '<td class="details-control"><i class="fa fa-plus-square fa-lg"></i></td>' +
+                                  '<td><%= r.locus %><button name="gene-report" data-locus="<%= r.locus %>" class="btn btn-link btn-sm"><i class="fa fa-info-circle fa-lg"></i><span class="sr-only">Get Gene Report</span></button></td>' +
                                   '<td><%= r.line_record.line_id %></td>' +
                                   '</tr>' +
                                   '<% }) %>' +
                                   '</tbody>' +
-                                  '</table>')
+                                  '</table>'),
+        imageDetailRow: _.template('<table class="table table-striped table-bordered">' +
+                                   '<thead><tr>' +
+                                   '<th></th>' +
+                                   '</tr></thead><tbody>' +
+                                   '<% _.each(result, function(r) { %>' +
+                                   '<tr>' +
+                                   '<td><img src="' + imageSrc +'?image_id=<%= r.image_record.image_id %>&width=160"></td>' +
+                                   '</tr>' +
+                                   '<% }) %>' +
+                                   '</tbody></table>')
     };
 
     //draw individual gen expression table
@@ -62,7 +75,7 @@
             };
 
             Agave.api.adama.search(
-                {'namespace': 'aip', 'service': 'locus_gene_report_v0.1', 'queryParams': query},
+                {'namespace': 'aip', 'service': 'locus_gene_report_v0.2.0', 'queryParams': query},
                 function(search) {
                     var html = templates.geneReport(search.obj.result[0]);
                     $(html).appendTo('body').modal();
@@ -93,7 +106,7 @@
             };
 
             Agave.api.adama.search(
-                {'namespace': 'aip', 'service': 'locus_gene_report_v0.1', 'queryParams': query},
+                {'namespace': 'aip', 'service': 'locus_gene_report_v0.2.0', 'queryParams': query},
                 function(search) {
                     var html = templates.geneReport(search.obj.result[0]);
                     $(html).appendTo('body').modal();
@@ -113,7 +126,58 @@
         }
 
         $('.reporter_image_results', appContext).html(templates.imageTable(json.obj));
-        $('.reporter_image_results table', appContext).dataTable( {'lengthMenu': [5, 10, 25, 50, 100]} );
+        var iTable = $('.reporter_image_results table', appContext).DataTable( {'lengthMenu': [10, 25, 50, 100],
+                                                                                'columnDefs': [{'targets': 0,
+                                                                                                'searchable': false,
+                                                                                                'orderable': false,
+                                                                                                'width': '25px'}]} );
+
+        $('.reporter_image_results table tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = iTable.row(tr);
+
+            if ( row.child.isShown() ) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+                $(this).html('<i class="fa fa-plus-square fa-lg">');
+            } else {
+                // Open this row
+                var line = row.data()[2];
+                console.log('LINE: ' + line);
+                var query = { line: line };
+                var detail = '<div id="detailResult"></div>';
+                row.child(detail).show();
+                $(this).html('<i class="fa fa-minus-square fa-lg">');
+                tr.addClass('shown');
+                Agave.api.adama.search(
+                    {'namespace': 'eriksf-dev', 'service': 'images_by_line_v0.1', 'queryParams': query},
+                    function(search) {
+                        var html = templates.imageDetailRow(search.obj);
+                        $('#detailResult', appContext).html(html);
+                    }
+                );
+            }
+        } );
+
+        $('button[name=gene-report]', appContext).on('click', function(e) {
+            e.preventDefault();
+
+            var locus = $(this).attr('data-locus');
+
+            var query = {
+                locus: locus
+            };
+
+            Agave.api.adama.search(
+                {'namespace': 'aip', 'service': 'locus_gene_report_v0.2.0', 'queryParams': query},
+                function(search) {
+                    var html = templates.geneReport(search.obj.result[0]);
+                    $(html).appendTo('body').modal();
+                }
+            );
+        });
+
     };
 
     var showError = function(err) {
