@@ -28,7 +28,7 @@
         resultTable: _.template('<table class="table table-striped table-bordered"><caption>Results from the Arabidopsis 2010 Expression Database</caption><thead><tr><th>Gene</th><th>Material</th><th>Cycle Time</th><th>Std dev (+)</th><th>Ratio to Invariants</th><th>Std dev (+)</th><th>Absolute Concentration</th><th>Std dev (+)</th></tr></thead><tbody><% _.each(result, function(r) { %><tr><td><%= r.transcript %> <button name="gene-report" data-locus="<%= r.transcript %>" class="btn btn-link btn-sm"><i class="fa fa-info-circle"></i><span class="sr-only">Get Gene Report</span></button></td><td><%= r.expression_record.material_text_description %></td><td><%= r.expression_record.cycle_time %></td><td><%= r.expression_record.cycle_time_stdev %></td><td><%= r.expression_record.ratio_to_invariants %></td><td><%= r.expression_record.ratio_to_invariants_stdev %></td><td><%= r.expression_record.absolute_concentration %></td><td><%= r.expression_record.absolute_concentration_stdev %></td></tr><% }) %></tbody></table>'),
         comparisonTable: _.template('<table class="table table-striped table-bordered"><caption>Results from the Arabidopsis 2010 Expression Database</caption><thead><tr><th>Gene</th><th>Material 1</th><th>Expression Value (fmol/mg)</th><th>Std dev (+)</th><th>Material 2</th><th>Expression Value (fmol/mg)</th><th>Std dev (+)</th></tr></thead><tbody><% _.each(result, function(r) { %><tr><td><%= r.transcript %> <button name="gene-report" data-locus="<%= r.transcript %>" class="btn btn-link btn-sm"><i class="fa fa-info-circle"></i><span class="sr-only">Get Gene Report</span></button></td><td><%= r.expression_comparison_record.material1_text_description %></td><td><%= r.expression_comparison_record.expression_value_material1 %></td><td><%= r.expression_comparison_record.expression_value_material1_stdev %></td><td><%= r.expression_comparison_record.material2_text_description %></td><td><%= r.expression_comparison_record.expression_value_material2 %></td><td><%= r.expression_comparison_record.expression_value_material2_stdev %></td></tr><% }) %></tbody></table>'),
         geneReport: _.template('<div class="modal fade"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" data-dismiss="modal" class="close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button><h4>Gene Report: <%= locus %></h4></div><div class="modal-body"><% _.each(properties, function(prop) { %><h3><%= prop.type.replace("_"," ") %></h3><p><%= prop.value %></p><% }) %></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div></div></div>'),
-        imageTable: _.template('<table id="iTable" class="table table-striped table-bordered">' +
+        imageTable: _.template('<table class="table table-striped table-bordered image-table">' +
                                   '<thead><tr>' +
                                   '<th></th>' +
                                   '<th>Gene</th>' +
@@ -43,7 +43,7 @@
                                   '<% }) %>' +
                                   '</tbody>' +
                                   '</table>'),
-        imageDetailRow: _.template('<table class="table table-striped table-bordered">' +
+        imageDetailRow: _.template('<table class="table table-striped table-bordered image-detail-table">' +
                                    '<thead><tr>' +
                                    '<th></th>' +
                                    '<th>PO Code</th>' +
@@ -52,22 +52,54 @@
                                    '</tr></thead><tbody>' +
                                    '<% _.each(result, function(r) { %>' +
                                    '<tr>' +
-                                   '<td rowspan="<%= r.image_record.po_codes.length %>"><img src="' + imageSrc +'?image_id=<%= r.image_record.image_id %>&width=160"></td>' +
-                                   '<td><%= r.image_record.po_codes[0].po_code %></td>' +
+                                   '<td rowspan="<%= r.image_record.po_codes.length %>"><img class="iButton" src="' + imageSrc +'?image_id=<%= r.image_record.image_id %>&width=160" data-image_id="<%= r.image_record.image_id %>"></td>' +
+                                   '<td><%= r.image_record.po_codes[0].po_code %><button name="po-report" data-po_code="<%= r.image_record.po_codes[0].po_code %>" class="btn btn-link btn-sm"><i class="fa fa-info-circle fa-lg"></i><span class="sr-only">Get PO Report</span></button></td>' +
                                    '<td><%= r.image_record.po_codes[0].po_name %></td>' +
                                    '<td><%= r.image_record.po_codes[0].expression %></td>' +
                                    '</tr>' +
                                    '<% if (r.image_record.po_codes.length > 1) { %>' +
                                    '<% for(i=1; i < r.image_record.po_codes.length; i++) { %>' +
                                    '<tr>' +
-                                   '<td><%= r.image_record.po_codes[i].po_code %></td>' +
+                                   '<td><%= r.image_record.po_codes[i].po_code %><button name="po-report" data-po_code="<%= r.image_record.po_codes[i].po_code %>" class="btn btn-link btn-sm"><i class="fa fa-info-circle fa-lg"></i><span class="sr-only">Get PO Report</span></button></td>' +
                                    '<td><%= r.image_record.po_codes[i].po_name %></td>' +
                                    '<td><%= r.image_record.po_codes[i].expression %></td>' +
                                    '</tr>' +
                                    '<% } %>' +
                                    '<% } %>' +
                                    '<% }) %>' +
-                                   '</tbody></table>')
+                                   '</tbody></table>'),
+        poReport: _.template('<div class="modal fade">' +
+                             '<div class="modal-dialog">' +
+                             '<div class="modal-content">' +
+                             '<div class="modal-header">' +
+                             '<button type="button" data-dismiss="modal" class="close">' +
+                             '<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>' +
+                             '</button>' +
+                             '<h4>Plant Ontology Report - <%= po_code %></h4>' +
+                             '</div>' +
+                             '<div class="modal-body">' +
+                             '<h3>Accession</h3><p><%= po_code %></p>' +
+                             '<h3>Name</h3><p><%= po_definition_record.po_name %></p>' +
+                             '<h3>Namespace</h3><p><%= po_definition_record.po_namespace %></p>' +
+                             '<h3>Definition</h3><p><%= po_definition_record.po_def %></p>' +
+                             '</div>' +
+                             '<div class="modal-footer">' +
+                             '<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>' +
+                             '</div></div></div></div>'),
+        imageFull: _.template('<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">' +
+                              '<div class="modal-dialog">' +
+                              '<div class="modal-content">' +
+                              '<div class="modal-header">' +
+                              '<button type="button" data-dismiss="modal" class="close">' +
+                              '<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>' +
+                              '</button>' +
+                              '</div>' +
+                              '<div class="modal-body">' +
+                              '<img class="full-image" src="' + imageSrc +'?image_id=<%= image_id %>">' +
+                              '</div>' +
+                              '<div class="modal-footer">' +
+                              '<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>' +
+                              '</div></div></div></div>'),
     };
 
     //draw individual gen expression table
@@ -191,6 +223,34 @@
                     $(html).appendTo('body').modal();
                 }
             );
+        });
+
+        $('.reporter_image_results table', appContext).on('click', 'button[name=po-report]', function(e) {
+            e.preventDefault();
+
+            var po_code = $(this).attr('data-po_code');
+
+            var query = {
+                po_code: po_code
+            };
+
+            Agave.api.adama.search(
+                {'namespace': 'eriksf-dev', 'service': 'podefinition_by_code_v0.1', 'queryParams': query},
+                function(search) {
+                    var html = templates.poReport(search.obj.result[0]);
+                    $(html).appendTo('body').modal();
+                }
+            );
+        });
+
+        $('.reporter_image_results table', appContext).on('click', '.iButton', function(e) {
+            e.preventDefault();
+
+            var image_id = $(this).attr('data-image_id');
+            var query = { image_id: image_id };
+
+            var html = templates.imageFull(query);
+            $(html).appendTo('body').modal();
         });
 
     };
