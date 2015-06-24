@@ -46,11 +46,26 @@
         imageDetailRow: _.template('<table class="table table-striped table-bordered">' +
                                    '<thead><tr>' +
                                    '<th></th>' +
+                                   '<th>PO Code</th>' +
+                                   '<th>PO Name</th>' +
+                                   '<th>Expression?</th>' +
                                    '</tr></thead><tbody>' +
                                    '<% _.each(result, function(r) { %>' +
                                    '<tr>' +
-                                   '<td><img src="' + imageSrc +'?image_id=<%= r.image_record.image_id %>&width=160"></td>' +
+                                   '<td rowspan="<%= r.image_record.po_codes.length %>"><img src="' + imageSrc +'?image_id=<%= r.image_record.image_id %>&width=160"></td>' +
+                                   '<td><%= r.image_record.po_codes[0].po_code %></td>' +
+                                   '<td><%= r.image_record.po_codes[0].po_name %></td>' +
+                                   '<td><%= r.image_record.po_codes[0].expression %></td>' +
                                    '</tr>' +
+                                   '<% if (r.image_record.po_codes.length > 1) { %>' +
+                                   '<% for(i=1; i < r.image_record.po_codes.length; i++) { %>' +
+                                   '<tr>' +
+                                   '<td><%= r.image_record.po_codes[i].po_code %></td>' +
+                                   '<td><%= r.image_record.po_codes[i].po_name %></td>' +
+                                   '<td><%= r.image_record.po_codes[i].expression %></td>' +
+                                   '</tr>' +
+                                   '<% } %>' +
+                                   '<% } %>' +
                                    '<% }) %>' +
                                    '</tbody></table>')
     };
@@ -151,7 +166,7 @@
                 $(this).html('<i class="fa fa-minus-square fa-lg">');
                 tr.addClass('shown');
                 Agave.api.adama.search(
-                    {'namespace': 'eriksf-dev', 'service': 'images_by_line_v0.1', 'queryParams': query},
+                    {'namespace': 'eriksf-dev', 'service': 'images_data_by_line_v0.1', 'queryParams': query},
                     function(search) {
                         var html = templates.imageDetailRow(search.obj);
                         $('#detailResult', appContext).html(html);
