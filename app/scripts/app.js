@@ -21,7 +21,6 @@
         log( 'Initializing app...' );
       };
 
-    //var imageSrc = 'https://api.araport.org/community/v0.3/eriksf-dev/image_by_id_v0.1/search';
     var imageSrc = 'http://www.jcvi.org/arabidopsis/qpcr/get_image.php';
 
     var templates = {
@@ -313,8 +312,8 @@
         $('.gene_results').empty();
         $('.error').empty();
         Agave.api.adama.search({
-            'namespace': 'vivek-dev',
-            'service': 'expression_per_gene_tissue_02_v0.2',
+            'namespace': 'eriksf-dev',
+            'service': 'expression_per_gene_tissue_v0.3',
             'queryParams': query
         }, showResults, showError);
     }); /// end gene submit function
@@ -332,7 +331,7 @@
         $('.error').empty();
         Agave.api.adama.search({
             'namespace': 'eriksf-dev',
-            'service': 'expression_condition_comparison_v0.2',
+            'service': 'expression_condition_comparison_v0.3',
             'queryParams': query
         }, showCompResults, showError);
     }); /// end comparison submit function

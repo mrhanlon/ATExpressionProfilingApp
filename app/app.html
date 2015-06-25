@@ -3,12 +3,37 @@
     <div id="expression_viewer">
 
         <ul id="ev_tabs" class="nav nav-tabs" role="tablist">
+            <li id="t_about"><a href="#d_about" role="tab" data-toggle="tab">About</a></li>
             <li id="t_expression_gene" class="active"><a href="#d_expression_gene" role="tab" data-toggle="tab">Gene Expression</a></li>
             <li id="t_expression_comp"><a href="#d_expression_comp" role="tab" data-toggle="tab">Expression Comparison</a></li>
             <li id="t_reporter_images"><a href="#d_reporter_images" role="tab" data-toggle="tab">Reporter Images</a></li>
         </ul>
 
         <div id="ev_tab_content" class="tab-content">
+            <div class="tab-pane" id="d_about">
+                <h3>Completing the Expression Catalog of the Arabidopsis Transcriptome by Quantitative Real Time PCR</h3>
+                <br>
+                <div class="container">
+                    <blockquote>
+                    <p>The aim of this project is to provide the research community with a catalog of expression
+                    profiles for all of the approximately 4,000 Arabidopsis genes for which such data do not
+                    currently exist. The latest Arabidopsis genome annotation contains 29,993 genes of which 3,786 are transposon related genes and pseudogenes of various kinds. Community efforts using the Affymetrix ATH1 expression array have generated over 1400 publicly available datasets.
+                    These provide statistically significant expression values over diverse tissues for ~18,600
+                    genes. Massively parallel signature sequencing has produced reliable expression profiles
+                    for ~ 20,800 genes. Together these methods provide data for
+                    just over 22,000 distinct protein-coding genes. This leaves at least 4,000 genes without expression data. We propose to develop a catalog of quantitative expression profiles under a variety of tissues and conditions for these 4,000+ Arabidopsis genes
+                    that either fall below levels detectable by the Affymetrix ATH1 array or are not
+                    represented on the array using high throughput quantitative real-time PCR, a technique that
+                    is several orders of magnitude more sensitive than either of the above methods. In
+                    parallel with this, we will develop spatial expression profiles for ~ 1,000 Arabidopsis hypothetical genes using sensitive reporter gene constructs.
+                    </p>
+                    <p><small>This material is based upon work supported by the <a href="http://www.nsf.gov" target="_blank">National Science Foundation <i class="fa fa-external-link"></i></a> under Grant No.0520022. Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily
+                    reflect the views of the National Science Foundation.</small>
+                    </p>
+                    </blockquote>
+                </div>
+            </div>
+
             <div class="tab-pane active" id="d_expression_gene">
 
                 <h3>Enter an Arabidopsis gene identifier AND/OR choose a tissue to view the expression report</h3>
@@ -92,7 +117,7 @@
                 <h3>Enter an Arabidopsis Gene to view available reporter images</h3>
                 <form name="reporter_image_form" role="form">
                     <div class="form-group col-xs-4">
-                        <label for="ri_gene" class="control-label">Gene (AGI ID, e.g. AT1G51960)</label>
+                        <label for="ri_gene" class="control-label">Gene (AGI ID, e.g. AT1G51960, AT5G60110)</label>
                         <input type="text" name="ri_gene" id="ri_gene" value="AT1G51960" class="form-control" placeholder="Gene (AGI ID)"/>
                     </div>
                     <br>
