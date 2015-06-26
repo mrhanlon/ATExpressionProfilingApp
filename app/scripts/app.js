@@ -197,7 +197,7 @@
                 $(this).html('<i class="fa fa-minus-square fa-lg">');
                 tr.addClass('shown');
                 Agave.api.adama.search(
-                    {'namespace': 'eriksf-dev', 'service': 'images_data_by_line_v0.1', 'queryParams': query},
+                    {'namespace': 'jcvi', 'service': 'images_data_by_line_v0.1', 'queryParams': query},
                     function(search) {
                         var html = templates.imageDetailRow(search.obj);
                         $('#detailResult', appContext).html(html);
@@ -234,7 +234,7 @@
             };
 
             Agave.api.adama.search(
-                {'namespace': 'eriksf-dev', 'service': 'podefinition_by_code_v0.1', 'queryParams': query},
+                {'namespace': 'jcvi', 'service': 'podefinition_by_code_v0.1', 'queryParams': query},
                 function(search) {
                     var html = templates.poReport(search.obj.result[0]);
                     $(html).appendTo('body').modal();
@@ -293,7 +293,7 @@
         $('.reporter_image_results').empty();
         $('.error').empty();
         Agave.api.adama.search({
-            'namespace': 'eriksf-dev',
+            'namespace': 'jcvi',
             'service': 'lines_by_locus_v0.1',
             'queryParams': query
         }, showImageResults, showError);
@@ -312,7 +312,7 @@
         $('.gene_results').empty();
         $('.error').empty();
         Agave.api.adama.search({
-            'namespace': 'eriksf-dev',
+            'namespace': 'jcvi',
             'service': 'expression_per_gene_tissue_v0.3',
             'queryParams': query
         }, showResults, showError);
@@ -330,7 +330,7 @@
         $('.comp_results').empty();
         $('.error').empty();
         Agave.api.adama.search({
-            'namespace': 'eriksf-dev',
+            'namespace': 'jcvi',
             'service': 'expression_condition_comparison_v0.3',
             'queryParams': query
         }, showCompResults, showError);
