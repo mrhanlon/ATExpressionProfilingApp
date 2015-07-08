@@ -168,6 +168,7 @@
         $('.reporter_image_results table tbody').on('click', 'td.details-control', function () {
             var tr = $(this).closest('tr');
             var row = iTable.row(tr);
+            var row_number = row.index();
 
             if ( row.child.isShown() ) {
                 // This row is already open - close it
@@ -179,7 +180,7 @@
                 var line = row.data()[2];
                 console.log('LINE: ' + line);
                 var query = { line: line };
-                var detail = '<div id="detailResult"></div>';
+                var detail = '<div id="detailResult-' + row_number + '"></div>';
                 row.child(detail).show();
                 $(this).html('<i class="fa fa-minus-square fa-lg">');
                 tr.addClass('shown');
@@ -187,7 +188,7 @@
                     {'namespace': 'jcvi', 'service': 'images_data_by_line_v0.1', 'queryParams': query},
                     function(search) {
                         var html = templates.imageDetailRow(search.obj);
-                        $('#detailResult', appContext).html(html);
+                        $('#detailResult-'+row_number, appContext).html(html);
                     }
                 );
             }
