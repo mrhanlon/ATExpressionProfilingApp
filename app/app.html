@@ -36,16 +36,16 @@
 
             <div class="tab-pane active" id="d_expression_gene">
 
-                <h3>Enter an Arabidopsis gene identifier AND/OR choose a tissue to view the expression report</h3>
+                <h3>Enter an Arabidopsis transcript identifier and choose a tissue (or treatment) to view the expression report</h3>
                 <form name="expression_gene_form" role="form">
                     <div class="form-group col-xs-4">
-                        <label for="expression_gene" class="control-label">Gene (AGI ID, e.g. AT1G33930.1, AT1G01460.1)</label>
-                        <input type="text" name="expression_gene" id="expression_gene" value="AT1G33930.1" class="form-control" placeholder="Gene (AGI ID)"/>
+                        <label for="expression_gene" class="control-label">Transcript (AGI ID, e.g. AT1G33930.1)</label>
+                        <input type="text" name="expression_gene" id="expression_gene" value="AT1G33930.1" class="form-control" placeholder="Transcript (AGI ID)"/>
                     </div>
                     <div class="form-group col-xs-4">
                         <label for="expression_tissue" class="control-label">Tissue or Treatment Type</label>
                         <select name="expression_tissue" id="expression_tissue" class="form-control">
-                            <option value="none">None</option>
+                            <option value="none">All</option>
                             <option value="flower">Flower Buds</option>
                             <option value="iaa">IAA</option>
                             <option value="leaf">Leaf</option>
@@ -64,12 +64,21 @@
                     </div>
                 </form>
 
+                <div class="gene_results_progress hidden">
+                    <br>
+                    <h4>Loading</h4>
+                    <div class="progress progress-striped active">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                            <span class="sr-only">Loading Data</span>
+                        </div>
+                    </div>
+                </div>
                 <div class="gene_results"></div>
             </div>
 
             <div class="tab-pane" id="d_expression_comp">
-                <h3>Select two tissue/treatment types and a fold change to view the expression report</h3>
-                <h5><em>For example, if you want to examine genes that show 5-fold expression in ROOT compared to LEAF.</em></h5>
+                <h3>Specify a tissue (or treatment), a fold change (positive integer), and a 2nd tissue (or treatment) to view the expression report</h3>
+                <h5><em>For example, examine genes that show 5-fold expression in ROOT as compared to LEAF.</em></h5>
                 <form name="expression_comp_form" role="form">
                     <div class="form-group col-xs-4">
                         <label for="expression_tissue1" class="control-label">Tissue or Treatment Type</label>
@@ -77,7 +86,7 @@
                             <option value="flower">Flower Buds</option>
                             <option value="iaa">IAA</option>
                             <option value="leaf">Leaf</option>
-                            <option value="root">Root</option>
+                            <option value="root" selected>Root</option>
                             <option value="salicylic">Salicylic Acid</option>
                             <option value="nacl">NaCl</option>
                             <option value="young">Young Siliques</option>
@@ -86,14 +95,14 @@
                     </div>
                     <div class="form-group col-xs-4">
                         <label for="fold_change" class="control-label">> Fold Change</label>
-                        <input type="number" name="fold_change" id="fold_change" size="5" class="form-control" required/>
+                        <input type="number" name="fold_change" id="fold_change" value=5 size="5" class="form-control" required/>
                     </div>
                     <div class="form-group col-xs-4">
                         <label for="expression_tissue2" class="control-label">Tissue or Treatment Type</label>
                         <select name="expression_tissue2" id="expression_tissue2" class="form-control">
                             <option value="flower">Flower Buds</option>
                             <option value="iaa">IAA</option>
-                            <option value="leaf">Leaf</option>
+                            <option value="leaf" selected>Leaf</option>
                             <option value="root">Root</option>
                             <option value="salicylic">Salicylic Acid</option>
                             <option value="nacl">NaCl</option>
@@ -109,12 +118,21 @@
                     </div>
                 </form>
 
+                <div class="comp_results_progress hidden">
+                    <br>
+                    <h4>Loading</h4>
+                    <div class="progress progress-striped active">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                            <span class="sr-only">Loading Data</span>
+                        </div>
+                    </div>
+                </div>
                 <div class="comp_results"></div>
             </div>
 
             <div class="tab-pane" id="d_reporter_images">
 
-                <h3>Enter an Arabidopsis Gene to view available reporter images</h3>
+                <h3>Enter an Arabidopsis gene to view available reporter images</h3>
                 <form name="reporter_image_form" role="form">
                     <div class="form-group col-xs-4">
                         <label for="ri_gene" class="control-label">Gene (AGI ID, e.g. AT1G51960)</label>
@@ -127,6 +145,15 @@
                     </div>
                 </form>
 
+                <div class="reporter_image_results_progress hidden">
+                    <br>
+                    <h4>Loading</h4>
+                    <div class="progress progress-striped active">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                            <span class="sr-only">Loading Data</span>
+                        </div>
+                    </div>
+                </div>
                 <div class="reporter_image_results"></div>
             </div>
         </div>

@@ -21,8 +21,6 @@
         log( 'Initializing app...' );
       };
 
-    var imageSrc = 'http://www.jcvi.org/arabidopsis/qpcr/get_image.php';
-
     var templates = {
         resultTable: _.template('<table class="table table-striped table-bordered at-table"><caption>Results from the Arabidopsis 2010 Expression Database</caption><thead><tr><th>Gene</th><th>Material</th><th>Cycle Time</th><th>Std dev (+)</th><th>Ratio to Invariants</th><th>Std dev (+)</th><th>Absolute Concentration</th><th>Std dev (+)</th></tr></thead><tbody><% _.each(result, function(r) { %><tr><td><%= r.transcript %> <button name="gene-report" data-visible="false" data-locus="<%= r.transcript %>" class="btn btn-link btn-sm"><i class="fa fa-info-circle"></i><span class="sr-only">Get Gene Report</span></button></td><td><%= r.expression_record.material_text_description %></td><td><%= r.expression_record.cycle_time %></td><td><%= r.expression_record.cycle_time_stdev %></td><td><%= r.expression_record.ratio_to_invariants %></td><td><%= r.expression_record.ratio_to_invariants_stdev %></td><td><%= r.expression_record.absolute_concentration %></td><td><%= r.expression_record.absolute_concentration_stdev %></td></tr><% }) %></tbody></table>'),
         comparisonTable: _.template('<table class="table table-striped table-bordered at-table"><caption>Results from the Arabidopsis 2010 Expression Database</caption><thead><tr><th>Gene</th><th>Material 1</th><th>Expression Value (fmol/mg)</th><th>Std dev (+)</th><th>Material 2</th><th>Expression Value (fmol/mg)</th><th>Std dev (+)</th></tr></thead><tbody><% _.each(result, function(r) { %><tr><td><%= r.transcript %> <button name="gene-report" data-visible="false" data-locus="<%= r.transcript %>" class="btn btn-link btn-sm"><i class="fa fa-info-circle"></i><span class="sr-only">Get Gene Report</span></button></td><td><%= r.expression_comparison_record.material1_text_description %></td><td><%= r.expression_comparison_record.expression_value_material1 %></td><td><%= r.expression_comparison_record.expression_value_material1_stdev %></td><td><%= r.expression_comparison_record.material2_text_description %></td><td><%= r.expression_comparison_record.expression_value_material2 %></td><td><%= r.expression_comparison_record.expression_value_material2_stdev %></td></tr><% }) %></tbody></table>'),
@@ -50,7 +48,7 @@
                                    '</tr></thead><tbody>' +
                                    '<% _.each(result, function(r) { %>' +
                                    '<tr>' +
-                                   '<td rowspan="<%= r.image_record.po_codes.length %>"><img class="iButton" src="' + imageSrc +'?image_id=<%= r.image_record.image_id %>&width=160" data-image_id="<%= r.image_record.image_id %>"></td>' +
+                                   '<td rowspan="<%= r.image_record.po_codes.length %>"><img class="thumbnail" src="<%= r.image_record.image_url %>"></td>' +
                                    '<td><%= r.image_record.po_codes[0].po_code %><button name="po-report" data-po_code="<%= r.image_record.po_codes[0].po_code %>" class="btn btn-link btn-sm"><i class="fa fa-info-circle fa-lg"></i><span class="sr-only">Get PO Report</span></button></td>' +
                                    '<td><%= r.image_record.po_codes[0].po_name %></td>' +
                                    '<td><%= r.image_record.po_codes[0].expression %></td>' +
@@ -79,7 +77,7 @@
                               '</button>' +
                               '</div>' +
                               '<div class="modal-body">' +
-                              '<img class="full-image" src="' + imageSrc +'?image_id=<%= image_id %>">' +
+                              '<img class="full-image" src="<%= image_url %>">' +
                               '</div>' +
                               '<div class="modal-footer">' +
                               '<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>' +
@@ -128,6 +126,7 @@
             return;
         }
 
+        $('.gene_results_progress', appContext).addClass('hidden');
         $('.gene_results', appContext).html(templates.resultTable(json.obj));
 
         geneReportHandler();
@@ -143,6 +142,7 @@
             return;
         }
 
+        $('.comp_results_progress', appContext).addClass('hidden');
         $('.comp_results', appContext).html(templates.comparisonTable(json.obj));
 
         geneReportHandler();
@@ -158,6 +158,7 @@
             return;
         }
 
+        $('.reporter_image_results_progress', appContext).addClass('hidden');
         $('.reporter_image_results', appContext).html(templates.imageTable(json.obj));
         var iTable = $('.reporter_image_results table', appContext).DataTable( {'lengthMenu': [10, 25, 50, 100],
                                                                                 'columnDefs': [{'targets': 0,
@@ -177,15 +178,15 @@
                 $(this).html('<i class="fa fa-plus-square fa-lg">');
             } else {
                 // Open this row
-                var line = row.data()[2];
-                console.log('LINE: ' + line);
-                var query = { line: line };
+                var line_id = row.data()[2];
+                console.log('LINE: ' + line_id);
+                var query = { line_id: line_id };
                 var detail = '<div id="detailResult-' + row_number + '"></div>';
                 row.child(detail).show();
                 $(this).html('<i class="fa fa-minus-square fa-lg">');
                 tr.addClass('shown');
                 Agave.api.adama.search(
-                    {'namespace': 'jcvi', 'service': 'images_data_by_line_v0.1', 'queryParams': query},
+                    {'namespace': 'jcvi', 'service': 'images_data_by_line_v0.2', 'queryParams': query},
                     function(search) {
                         var html = templates.imageDetailRow(search.obj);
                         $('#detailResult-'+row_number, appContext).html(html);
@@ -220,11 +221,11 @@
             }
         });
 
-        $('.reporter_image_results table', appContext).on('click', '.iButton', function(e) {
+        $('.reporter_image_results table', appContext).on('click', '.thumbnail', function(e) {
             e.preventDefault();
 
-            var image_id = $(this).attr('data-image_id');
-            var query = { image_id: image_id };
+            var image_url = $(this).attr('src');
+            var query = { image_url: image_url };
 
             var html = templates.imageFull(query);
             $(html).appendTo('body').modal();
@@ -233,6 +234,9 @@
     };
 
     var showError = function(err) {
+        $('.gene_results_progress', appContext).addClass('hidden');
+        $('.comp_results_progress', appContext).addClass('hidden');
+        $('.reporter_image_results_progress', appContext).addClass('hidden');
         $('.error', appContext).html('<div class="alert alert-danger">Error contacting the server! Please try again later.</div>');
         console.error('Status: ' + err.obj.status + '  Message: ' + err.obj.message);
     };
@@ -270,6 +274,7 @@
 
         $('.reporter_image_results').empty();
         $('.error').empty();
+        $('.reporter_image_results_progress', appContext).removeClass('hidden');
         Agave.api.adama.search({
             'namespace': 'jcvi',
             'service': 'lines_by_locus_v0.1',
@@ -289,6 +294,7 @@
 
         $('.gene_results').empty();
         $('.error').empty();
+        $('.gene_results_progress', appContext).removeClass('hidden');
         Agave.api.adama.search({
             'namespace': 'jcvi',
             'service': 'expression_per_gene_tissue_v0.3',
@@ -307,6 +313,7 @@
 
         $('.comp_results').empty();
         $('.error').empty();
+        $('.comp_results_progress', appContext).removeClass('hidden');
         Agave.api.adama.search({
             'namespace': 'jcvi',
             'service': 'expression_condition_comparison_v0.3',

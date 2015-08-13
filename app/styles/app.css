@@ -16,14 +16,17 @@ caption {
 	text-align: center;
 }
 
-.iButton {
-	cursor: pointer;
-}
-
 .full-image {
     display: block;
     margin-left: auto;
     margin-right: auto;
+}
+
+.thumbnail {
+	cursor: pointer;
+	display: inline-block;
+	width: 160px;
+	height: auto;
 }
 
 .popover-definition {
