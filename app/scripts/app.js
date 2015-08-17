@@ -22,8 +22,53 @@
       };
 
     var templates = {
-        resultTable: _.template('<table class="table table-striped table-bordered at-table"><caption>Results from the Arabidopsis 2010 Expression Database</caption><thead><tr><th>Gene</th><th>Material</th><th>Cycle Time</th><th>Std dev (+)</th><th>Ratio to Invariants</th><th>Std dev (+)</th><th>Absolute Concentration</th><th>Std dev (+)</th></tr></thead><tbody><% _.each(result, function(r) { %><tr><td><%= r.transcript %> <button name="gene-report" data-visible="false" data-locus="<%= r.transcript %>" class="btn btn-link btn-sm"><i class="fa fa-info-circle"></i><span class="sr-only">Get Gene Report</span></button></td><td><%= r.expression_record.material_text_description %></td><td><%= r.expression_record.cycle_time %></td><td><%= r.expression_record.cycle_time_stdev %></td><td><%= r.expression_record.ratio_to_invariants %></td><td><%= r.expression_record.ratio_to_invariants_stdev %></td><td><%= r.expression_record.absolute_concentration %></td><td><%= r.expression_record.absolute_concentration_stdev %></td></tr><% }) %></tbody></table>'),
-        comparisonTable: _.template('<table class="table table-striped table-bordered at-table"><caption>Results from the Arabidopsis 2010 Expression Database</caption><thead><tr><th>Gene</th><th>Material 1</th><th>Expression Value (fmol/mg)</th><th>Std dev (+)</th><th>Material 2</th><th>Expression Value (fmol/mg)</th><th>Std dev (+)</th></tr></thead><tbody><% _.each(result, function(r) { %><tr><td><%= r.transcript %> <button name="gene-report" data-visible="false" data-locus="<%= r.transcript %>" class="btn btn-link btn-sm"><i class="fa fa-info-circle"></i><span class="sr-only">Get Gene Report</span></button></td><td><%= r.expression_comparison_record.material1_text_description %></td><td><%= r.expression_comparison_record.expression_value_material1 %></td><td><%= r.expression_comparison_record.expression_value_material1_stdev %></td><td><%= r.expression_comparison_record.material2_text_description %></td><td><%= r.expression_comparison_record.expression_value_material2 %></td><td><%= r.expression_comparison_record.expression_value_material2_stdev %></td></tr><% }) %></tbody></table>'),
+        resultTable: _.template('<table class="table table-striped table-bordered at-table">' +
+                                '<caption>Results from the Arabidopsis 2010 Expression Database</caption>' +
+                                '<thead><tr>' +
+                                '<th>Gene</th>' +
+                                '<th>Material</th>' +
+                                '<th>Cycle Time</th>' +
+                                '<th>Std dev (+)</th>' +
+                                '<th>Ratio to Invariants</th>' +
+                                '<th>Std dev (+)</th>' +
+                                '<th>Absolute Concentration</th>' +
+                                '<th>Std dev (+)</th></tr></thead><tbody>' +
+                                '<% _.each(result, function(r) { %>' +
+                                '<tr>' +
+                                '<td><%= r.transcript %><a href="#gene-report" tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-locus="<%= r.transcript %>" class="btn btn-link btn-sm"><i class="fa fa-info-circle"></i><span class="sr-only">Get Gene Report</span></a></td>' +
+                                '<td><%= r.expression_record.material_text_description %></td>' +
+                                '<td><%= r.expression_record.cycle_time %></td>' +
+                                '<td><%= r.expression_record.cycle_time_stdev %></td>' +
+                                '<td><%= r.expression_record.ratio_to_invariants %></td>' +
+                                '<td><%= r.expression_record.ratio_to_invariants_stdev %></td>' +
+                                '<td><%= r.expression_record.absolute_concentration %></td>' +
+                                '<td><%= r.expression_record.absolute_concentration_stdev %></td>' +
+                                '</tr>' +
+                                '<% }) %>' +
+                                '</tbody></table>'),
+        comparisonTable: _.template('<table class="table table-striped table-bordered at-table">' +
+                                    '<caption>Results from the Arabidopsis 2010 Expression Database</caption>' +
+                                    '<thead><tr>' +
+                                    '<th>Gene</th>' +
+                                    '<th>Material 1</th>' +
+                                    '<th>Expression Value (fmol/mg)</th>' +
+                                    '<th>Std dev (+)</th>' +
+                                    '<th>Material 2</th>' +
+                                    '<th>Expression Value (fmol/mg)</th>' +
+                                    '<th>Std dev (+)</th>' +
+                                    '</tr></thead><tbody>' +
+                                    '<% _.each(result, function(r) { %>' +
+                                    '<tr>' +
+                                    '<td><%= r.transcript %><a href="#gene-report" tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-locus="<%= r.transcript %>" class="btn btn-link btn-sm"><i class="fa fa-info-circle"></i><span class="sr-only">Get Gene Report</span></a></td>' +
+                                    '<td><%= r.expression_comparison_record.material1_text_description %></td>' +
+                                    '<td><%= r.expression_comparison_record.expression_value_material1 %></td>' +
+                                    '<td><%= r.expression_comparison_record.expression_value_material1_stdev %></td>' +
+                                    '<td><%= r.expression_comparison_record.material2_text_description %></td>' +
+                                    '<td><%= r.expression_comparison_record.expression_value_material2 %></td>' +
+                                    '<td><%= r.expression_comparison_record.expression_value_material2_stdev %></td>' +
+                                    '</tr>' +
+                                    '<% }) %>' +
+                                    '</tbody></table>'),
         imageTable: _.template('<table class="table table-striped table-bordered at-table image-table">' +
                                   '<thead><tr>' +
                                   '<th></th>' +
@@ -33,7 +78,7 @@
                                   '<% _.each(result, function(r) { %>' +
                                   '<tr>' +
                                   '<td class="details-control"><i class="fa fa-plus-square fa-lg"></i></td>' +
-                                  '<td><%= r.locus %><button name="gene-report" data-visible="false" data-locus="<%= r.locus %>" class="btn btn-link btn-sm"><i class="fa fa-info-circle fa-lg"></i><span class="sr-only">Get Gene Report</span></button></td>' +
+                                  '<td><%= r.locus %><a href="#gene-report" tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-locus="<%= r.locus %>" class="btn btn-link btn-sm"><i class="fa fa-info-circle fa-lg"></i><span class="sr-only">Get Gene Report</span></a></td>' +
                                   '<td><%= r.line_record.line_id %></td>' +
                                   '</tr>' +
                                   '<% }) %>' +
@@ -49,14 +94,14 @@
                                    '<% _.each(result, function(r) { %>' +
                                    '<tr>' +
                                    '<td rowspan="<%= r.image_record.po_codes.length %>"><img class="thumbnail" src="<%= r.image_record.image_url %>"></td>' +
-                                   '<td><%= r.image_record.po_codes[0].po_code %><button name="po-report" data-po_code="<%= r.image_record.po_codes[0].po_code %>" class="btn btn-link btn-sm"><i class="fa fa-info-circle fa-lg"></i><span class="sr-only">Get PO Report</span></button></td>' +
+                                   '<td><%= r.image_record.po_codes[0].po_code %><a href="#po-report" tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-po_code="<%= r.image_record.po_codes[0].po_code %>" class="btn btn-link btn-sm"><i class="fa fa-info-circle fa-lg"></i><span class="sr-only">Get PO Report</span></a></td>' +
                                    '<td><%= r.image_record.po_codes[0].po_name %></td>' +
                                    '<td><%= r.image_record.po_codes[0].expression %></td>' +
                                    '</tr>' +
                                    '<% if (r.image_record.po_codes.length > 1) { %>' +
                                    '<% for(i=1; i < r.image_record.po_codes.length; i++) { %>' +
                                    '<tr>' +
-                                   '<td><%= r.image_record.po_codes[i].po_code %><button name="po-report" data-visible="false" data-po_code="<%= r.image_record.po_codes[i].po_code %>" class="btn btn-link btn-sm"><i class="fa fa-info-circle fa-lg"></i><span class="sr-only">Get PO Report</span></button></td>' +
+                                   '<td><%= r.image_record.po_codes[i].po_code %><a href="#po-report" tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-po_code="<%= r.image_record.po_codes[i].po_code %>" class="btn btn-link btn-sm"><i class="fa fa-info-circle fa-lg"></i><span class="sr-only">Get PO Report</span></a></td>' +
                                    '<td><%= r.image_record.po_codes[i].po_name %></td>' +
                                    '<td><%= r.image_record.po_codes[i].expression %></td>' +
                                    '</tr>' +
@@ -90,31 +135,30 @@
 
     // gene report handler
     var geneReportHandler = function geneReportHandler() {
-        $('button[name=gene-report]', appContext).on('click', function(e) {
+        $('a[href=#gene-report]', appContext).on('click', function(e) {
             e.preventDefault();
             var el = $(this);
-            if (el.data('visible')) {
-                el.popover('hide');
-                el.data('visible', false);
-            } else {
-                var locus = el.attr('data-locus');
-                if (locus.indexOf('.') !== -1) {
-                    locus = locus.slice(0, locus.indexOf('.'));
-                }
-                var query = { locus: locus };
-                Agave.api.adama.search(
-                    {'namespace': 'aip', 'service': 'locus_gene_report_v0.2.0', 'queryParams': query},
-                    function(search) {
-                        el.popover({title: 'Gene Report: ' + locus,
-                                    content: templates.geneReportPopover(search.obj.result[0]),
-                                    trigger: 'manual',
-                                    html: true,
-                                    template: '<div class="popover popover-definition" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'});
-                        el.popover('show');
-                        el.data('visible', true);
-                    }
-                );
+            var locus = el.attr('data-locus');
+            if (locus.indexOf('.') !== -1) {
+                locus = locus.slice(0, locus.indexOf('.'));
             }
+            var query = { locus: locus };
+            Agave.api.adama.search(
+                {'namespace': 'aip', 'service': 'locus_gene_report_v0.2.0', 'queryParams': query},
+                function(search) {
+                    el.popover({title: 'Gene Report: ' + locus,
+                                content: templates.geneReportPopover(search.obj.result[0]),
+                                trigger: 'manual',
+                                html: true,
+                                template: '<div class="popover popover-definition" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'});
+                    el.popover('toggle');
+                    $('.close').remove();
+                    $('.popover-title').append('<button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>');
+                    $('.close').click(function () {
+                        $(this).parents('.popover').popover('hide');
+                    });
+                }
+            );
         });
     };
 
@@ -197,28 +241,27 @@
 
         geneReportHandler();
 
-        $('.reporter_image_results table', appContext).on('click', 'button[name=po-report]', function(e) {
+        $('.reporter_image_results table', appContext).on('click', 'a[href=#po-report]', function(e) {
             e.preventDefault();
             var el = $(this);
-            if (el.data('visible')) {
-                el.popover('hide');
-                el.data('visible', false);
-            } else {
-                var po_code = $(this).attr('data-po_code');
-                var query = { po_code: po_code };
-                Agave.api.adama.search(
-                    {'namespace': 'jcvi', 'service': 'podefinition_by_code_v0.1', 'queryParams': query},
-                    function(search) {
-                        el.popover({title: 'Plant Ontology Report - ' + po_code,
-                                    content: templates.poReportPopover(search.obj.result[0]),
-                                    trigger: 'manual',
-                                    html: true,
-                                    template: '<div class="popover popover-definition" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'});
-                        el.popover('show');
-                        el.data('visible', true);
-                    }
-                );
-            }
+            var po_code = $(this).attr('data-po_code');
+            var query = { po_code: po_code };
+            Agave.api.adama.search(
+                {'namespace': 'jcvi', 'service': 'podefinition_by_code_v0.1', 'queryParams': query},
+                function(search) {
+                    el.popover({title: 'Plant Ontology Report - ' + po_code,
+                                content: templates.poReportPopover(search.obj.result[0]),
+                                trigger: 'manual',
+                                html: true,
+                                template: '<div class="popover popover-definition" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'});
+                    el.popover('toggle');
+                    $('.close').remove();
+                    $('.popover-title').append('<button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>');
+                    $('.close').click(function () {
+                        $(this).parents('.popover').popover('hide');
+                    });
+                }
+            );
         });
 
         $('.reporter_image_results table', appContext).on('click', '.thumbnail', function(e) {
