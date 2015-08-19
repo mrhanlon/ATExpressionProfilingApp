@@ -40,7 +40,9 @@
                 <form name="expression_gene_form" role="form">
                     <div class="form-group col-xs-4">
                         <label for="expression_gene" class="control-label">Transcript (AGI ID, e.g. AT1G33930.1)</label>
-                        <input type="text" name="expression_gene" id="expression_gene" value="AT1G33930.1" class="form-control" placeholder="Transcript (AGI ID)"/>
+                        <select name="expression_gene" id="expression_gene" class="form-control" placeholder="Transcript (AGI ID)">
+                            <option value="AT1G33930.1">AT1G33930.1</option>
+                        </select>
                     </div>
                     <div class="form-group col-xs-4">
                         <label for="expression_tissue" class="control-label">Tissue or Treatment Type</label>

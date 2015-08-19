@@ -287,10 +287,38 @@
     /* go! */
     init();
 
+    $('#expression_gene', appContext).selectize({
+        options: [],
+        maxOptions: 2000,
+        labelField: 'transcript',
+        valueField: 'transcript',
+        searchField: 'transcript',
+        sortField: 'transcript',
+        create: false,
+        persist: false,
+        render: {
+            option: function(item, escape) {
+                return '<div>' + escape(item.transcript) + '</div>';
+            }
+        },
+        load: function (query, callback) {
+            if (!query.length) { return callback(); }
+                var params = { search_term: query };
+                Agave.api.adama.search({
+                    'namespace': 'jcvi',
+                    'service': 'search_available_transcripts_v0.1',
+                    'queryParams': params
+                }, function (search) {
+                       callback(search.obj);
+                   });
+            }
+    });
+
     $('#expression_gene_form_reset').on('click', function() {
         $('.error').empty();
         $('.gene_results').empty();
-        $('#expression_gene').val('');
+        $('#expression_gene', appContext)[0].selectize.clearOptions();
+        $('#expression_gene', appContext)[0].selectize.clear(true);
         $('#expression_tissue').val('none');
     });
 

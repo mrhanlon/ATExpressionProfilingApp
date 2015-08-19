@@ -4,6 +4,7 @@
   "dependencies": {
     "datatables": "~1.10.3",
     "underscore": "~1.7.0",
-    "datatables-bootstrap3": "*"
+    "datatables-bootstrap3": "*",
+    "selectize.js": "Arabidopsis-Information-Portal/selectize.js"
   }
 }
