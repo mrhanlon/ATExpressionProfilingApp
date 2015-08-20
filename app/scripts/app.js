@@ -113,7 +113,7 @@
                              '<h3>Name</h3><p><%= po_definition_record.po_name %></p>' +
                              '<h3>Namespace</h3><p><%= po_definition_record.po_namespace %></p>' +
                              '<h3>Definition</h3><p><%= po_definition_record.po_def %></p>'),
-        imageFull: _.template('<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">' +
+        imageFull: _.template('<div class="modal modal-wide fade" tabindex="-1" role="dialog" aria-hidden="true">' +
                               '<div class="modal-dialog">' +
                               '<div class="modal-content">' +
                               '<div class="modal-header">' +

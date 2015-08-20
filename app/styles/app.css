@@ -18,8 +18,19 @@ caption {
 
 .full-image {
     display: block;
-    margin-left: auto;
-    margin-right: auto;
+		width: 800px;
+		margin-left: auto;
+		margin-right: auto;
+}
+
+.modal.modal-wide .modal-dialog {
+		width: 70%;
+		margin-left: -35%;
+		left: 50%;
+}
+
+.modal-wide .modal-body {
+		overflow-y: auto;
 }
 
 .thumbnail {
