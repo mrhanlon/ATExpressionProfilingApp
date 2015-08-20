@@ -39,8 +39,8 @@
                 <h3>Enter an Arabidopsis transcript identifier and choose a tissue (or treatment) to view the expression report</h3>
                 <form name="expression_gene_form" role="form">
                     <div class="form-group col-xs-4">
-                        <label for="expression_gene" class="control-label">Transcript (AGI ID, e.g. AT1G33930.1)</label>
-                        <select name="expression_gene" id="expression_gene" class="form-control" placeholder="Transcript (AGI ID)">
+                        <label for="expression_transcript" class="control-label">Transcript (AGI ID, e.g. AT1G33930.1)</label>
+                        <select name="expression_transcript" id="expression_transcript" class="form-control" placeholder="Transcript (AGI ID)">
                             <option value="AT1G33930.1">AT1G33930.1</option>
                         </select>
                     </div>
@@ -138,7 +138,9 @@
                 <form name="reporter_image_form" role="form">
                     <div class="form-group col-xs-4">
                         <label for="ri_gene" class="control-label">Gene (AGI ID, e.g. AT1G51960)</label>
-                        <input type="text" name="ri_gene" id="ri_gene" value="AT1G51960" class="form-control" placeholder="Gene (AGI ID)"/>
+                        <select name="ri_gene" id="ri_gene" class="form-control" placeholder="Gene (AGI ID)">
+                            <option value="AT1G51960">AT1G51960</option>
+                        </select>
                     </div>
                     <br>
                     <div class="form-group">

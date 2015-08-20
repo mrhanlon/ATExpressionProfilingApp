@@ -5,6 +5,8 @@
     "datatables": "~1.10.3",
     "underscore": "~1.7.0",
     "datatables-bootstrap3": "*",
+    "microplugin": "~0.0.3",
+    "sifter": "~0.4.3"
     "selectize.js": "Arabidopsis-Information-Portal/selectize.js"
   }
 }

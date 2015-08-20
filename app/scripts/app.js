@@ -287,7 +287,7 @@
     /* go! */
     init();
 
-    $('#expression_gene', appContext).selectize({
+    $('#expression_transcript', appContext).selectize({
         options: [],
         maxOptions: 2000,
         labelField: 'transcript',
@@ -314,11 +314,38 @@
             }
     });
 
+    $('#ri_gene', appContext).selectize({
+        options: [],
+        maxOptions: 2000,
+        labelField: 'locus',
+        valueField: 'locus',
+        searchField: 'locus',
+        sortField: 'locus',
+        create: false,
+        persist: false,
+        render: {
+            option: function(item, escape) {
+                return '<div>' + escape(item.locus) + '</div>';
+            }
+        },
+        load: function (query, callback) {
+            if (!query.length) { return callback(); }
+                var params = { search_term: query };
+                Agave.api.adama.search({
+                    'namespace': 'jcvi',
+                    'service': 'search_available_locus_ids_v0.1',
+                    'queryParams': params
+                }, function (search) {
+                       callback(search.obj);
+                   });
+            }
+    });
+
     $('#expression_gene_form_reset').on('click', function() {
         $('.error').empty();
         $('.gene_results').empty();
-        $('#expression_gene', appContext)[0].selectize.clearOptions();
-        $('#expression_gene', appContext)[0].selectize.clear(true);
+        $('#expression_transcript', appContext)[0].selectize.clearOptions();
+        $('#expression_transcript', appContext)[0].selectize.clear(true);
         $('#expression_tissue').val('none');
     });
 
@@ -333,7 +360,8 @@
     $('#reporter_image_form_reset').on('click', function() {
         $('.error').empty();
         $('.reporter_image_results').empty();
-        $('#ri_gene').val('');
+        $('#ri_gene', appContext)[0].selectize.clearOptions();
+        $('#ri_gene', appContext)[0].selectize.clear(true);
     });
 
     $('form[name=reporter_image_form]').on('submit', function(e) {
@@ -357,7 +385,7 @@
         e.preventDefault();
 
         var query = {
-            transcript: this.expression_gene.value,
+            transcript: this.expression_transcript.value,
         };
         if (this.expression_tissue.value !== 'none') {
             query.material = this.expression_tissue.value;
