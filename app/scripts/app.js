@@ -306,7 +306,7 @@
                 var params = { search_term: query };
                 Agave.api.adama.search({
                     'namespace': 'jcvi',
-                    'service': 'search_available_transcripts_v0.1',
+                    'service': 'qpcr_search_available_transcripts_v0.2',
                     'queryParams': params
                 }, function (search) {
                        callback(search.obj);
@@ -333,7 +333,7 @@
                 var params = { search_term: query };
                 Agave.api.adama.search({
                     'namespace': 'jcvi',
-                    'service': 'search_available_locus_ids_v0.1',
+                    'service': 'reporter_search_available_locus_ids_v0.2',
                     'queryParams': params
                 }, function (search) {
                        callback(search.obj);
