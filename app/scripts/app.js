@@ -15,11 +15,11 @@
         if ( DEBUG ) {
           console.log( message );
         }
-      };
+    };
 
     var init = function init() {
         log( 'Initializing app...' );
-      };
+    };
 
     var templates = {
         resultTable: _.template('<table class="table table-striped table-bordered at-table">' +
@@ -211,6 +211,7 @@
                                                                                                 'width': '25px'}]} );
 
         $('.reporter_image_results table tbody').on('click', 'td.details-control', function () {
+            $('.error', appContext).empty();
             var tr = $(this).closest('tr');
             var row = iTable.row(tr);
             var row_number = row.index();
@@ -234,6 +235,9 @@
                     function(search) {
                         var html = templates.imageDetailRow(search.obj);
                         $('#detailResult-'+row_number, appContext).html(html);
+                        $('#detailResult-'+row_number, appContext).imagesLoaded().fail(function () {
+                            $('.error', appContext).html('<div class="alert alert-danger fade in" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> Error loading image(s) from the server! Please try again later.</div>');
+                        });
                     }
                 );
             }
@@ -273,19 +277,23 @@
             var html = templates.imageFull(query);
             $(html).appendTo('body').modal();
         });
-
     };
 
     var showError = function(err) {
         $('.gene_results_progress', appContext).addClass('hidden');
         $('.comp_results_progress', appContext).addClass('hidden');
         $('.reporter_image_results_progress', appContext).addClass('hidden');
-        $('.error', appContext).html('<div class="alert alert-danger">Error contacting the server! Please try again later.</div>');
+        $('.error', appContext).html('<div class="alert alert-danger fade in" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> Error contacting the server! Please try again later.</div>');
         console.error('Status: ' + err.obj.status + '  Message: ' + err.obj.message);
     };
 
     /* go! */
     init();
+
+    // clear error div when switching tabs
+    $('a[data-toggle="tab"]', appContext).on('shown.bs.tab', function () {
+        $('.error', appContext).empty();
+    });
 
     $('#expression_transcript', appContext).selectize({
         options: [],
