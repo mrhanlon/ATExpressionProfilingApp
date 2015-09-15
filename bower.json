@@ -2,13 +2,8 @@
   "name": "atexpressionprofilingapp",
   "private": true,
   "dependencies": {
-    "datatables": "~1.10.3",
     "datatables-bootstrap3": "*",
-    "eventEmitter": "~4.2.11",
-    "eventie": "~1.0.6",
     "imagesloaded": "~3.1.8",
-    "microplugin": "~0.0.3",
-    "sifter": "~0.4.3",
     "selectize.js": "Arabidopsis-Information-Portal/selectize.js",
     "underscore": "~1.7.0"
   }
